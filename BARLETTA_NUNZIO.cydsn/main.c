@@ -9,88 +9,75 @@
  *
  * ========================================
 */
-#include "project.h"
+
 #include "interruptUART.h"
-#include "stdio.h"
-#include "UART_RGB.h"
+#include "main.h"
+
 
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
     UART_ISR_StartEx(Custom_UART_RX_ISR);
     UART_RGB_Start();
-    EEPROM_Start();
-    EEPROM_UpdateTemperature();
-    uint8 value, flag;
-    static char aaa[19]="RGB LED Program $$$";
+    RGBLed_Start();
+    
     rec=0;
-    cont=0;
     flag=0;
     value=0;
-    //uint8 startAddress=0x0000;
-    typedef struct{
-        uint8_t red;
-        uint8_t green;
-        uint8_t blue;
-    } color;
+    cont=0;
     
-    color c;
-    uint8 ba;
     for(;;)
     {
-        if(rec==1){
+        
+        if(!flag && rec){
+            rec=0;
             value=UART_RGB_ReadRxData();
             UART_RGB_ClearRxBuffer();
-            rec=0;
-            cont+=1;
-            if (value == 0xA0){
-                cont=0;
-            }
-         }
-        if(value=='v'&& !flag){
-            flag=1;
-            UART_RGB_PutString(aaa);
-            cont=0;
-        }
-        if(flag){
-            switch(cont){
-                case 4: 
-                    cont=0;
-                    flag=0;
-                    break;
-                case 1: 
-                    EEPROM_WriteByte(value,0x00);
-                    ba= EEPROM_ReadByte(0x00);
-                    //c.red = value;
-                    break;
-                case 2:
-                    EEPROM_WriteByte(value,0x01);
-                    ba= EEPROM_ReadByte(0x01);
-                    //c.green = value;
-                    break;
-                case 3:
-                    EEPROM_WriteByte(value,0x02);
-                    ba= EEPROM_ReadByte(0x02);
-                    //c.blue = value;
-                    break;
-                 default:
-                    break;
-            }
-        }
-        
-        /*
-        while(rec && count<5){// rec è in interruptUART.h
-            rec=0;
-            EEPROM_WriteByte(UART_RGB_ReadRxData(),startAddress+count);
-            count+=1;
-            value=UART_RGB_ReadRxData();
             if(value=='v'){
+                flag=1;
                 UART_RGB_PutString(aaa);
-            }*/ /*
+            }
         }
-        if (EEPROM_ReadByte(startAddress+count-1)==0xc0){
-          count=0; 
-        }*/
+        if (flag && rec && !cont){
+            rec=0;
+            value=UART_RGB_ReadRxData();
+            UART_RGB_ClearRxBuffer();
+            if(value==0xA0){
+                cont=1;
+            }
+        }
+        if(cont==1 && rec && flag){
+            rec=0;
+            color.red=UART_RGB_ReadRxData();
+            UART_RGB_ClearRxBuffer();
+            UART_RGB_PutString("\n-1");
+            cont+=1;
+        }
+        if(cont==2 && rec && flag){
+            rec=0;
+            color.green=UART_RGB_ReadRxData();
+            UART_RGB_ClearRxBuffer();
+            UART_RGB_PutString("\n-2");
+            cont+=1;
+        }
+         if(cont==3 && rec && flag){
+            rec=0;
+            color.blue=UART_RGB_ReadRxData();
+            UART_RGB_ClearRxBuffer();
+            UART_RGB_PutString("\n-3");
+            cont+=1;
+        }
+        if (flag && rec && cont==4){
+            rec=0;
+            value=UART_RGB_ReadRxData();
+            UART_RGB_ClearRxBuffer();
+            UART_RGB_PutString("\n-4");
+            RGBLed_WriteColor();
+            cont=0;
+            //flag=0;
+        }
+            
+    
     }
 }
 
