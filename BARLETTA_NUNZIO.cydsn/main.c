@@ -11,6 +11,7 @@
 */
 
 #include "interruptUART.h"
+#include "interruptTIMER.h"
 #include "main.h"
 
 
@@ -18,9 +19,12 @@ int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
     UART_ISR_StartEx(Custom_UART_RX_ISR);
+    Timer_Start();
+    TIME_ISR_StartEx(Custom_TIME_ISR);
     UART_RGB_Start();
     RGBLed_Start();
     
+    time=0;
     rec=0;
     flag=0;
     value=0;
@@ -31,6 +35,7 @@ int main(void)
         
         if(!flag && rec){
             rec=0;
+            time=0;
             value=UART_RGB_ReadRxData();
             UART_RGB_ClearRxBuffer();
             if(value=='v'){
@@ -40,11 +45,19 @@ int main(void)
         }
         if (flag && rec && !cont){
             rec=0;
+            time=0;
             value=UART_RGB_ReadRxData();
             UART_RGB_ClearRxBuffer();
             if(value==0xA0){
+                time=0;
                 cont=1;
             }
+        }
+        if(cont!=0 && time==5 && flag){
+           UART_RGB_PutString("\nK");
+           cont=0;
+           time=0;
+           value=0;
         }
         if(cont==1 && rec && flag){
             rec=0;

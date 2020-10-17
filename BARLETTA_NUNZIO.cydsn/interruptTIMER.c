@@ -9,16 +9,13 @@
  *
  * ========================================
 */
-#include "interruptUART.h"
+#include "interruptTIMER.h"
 
-CY_ISR(Custom_UART_RX_ISR)
+CY_ISR(Custom_TIME_ISR)
 {  
-    if (UART_RGB_ReadRxStatus() == UART_RGB_RX_STS_FIFO_NOTEMPTY)
-    {  
-        rec=1;
-        
+    if(Timer_ReadStatusRegister()){
+    time+=1;
     }
-    
 }
 
 /* [] END OF FILE */
