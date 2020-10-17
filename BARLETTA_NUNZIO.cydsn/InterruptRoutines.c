@@ -9,13 +9,14 @@
  *
  * ========================================
 */
-#include "interruptTIMER.h"
+#include "InterruptRoutines.h"
 
-CY_ISR(Custom_TIME_ISR)
-{  
-    if(Timer_ReadStatusRegister()){
+CY_ISR(Custom_TIMER_ISR)
+{
+    // Read TIMER Status Register -- Bring interrupt line low
+    Timer_ReadStatusRegister();
     time+=1;
-    }
+    
 }
 
 /* [] END OF FILE */

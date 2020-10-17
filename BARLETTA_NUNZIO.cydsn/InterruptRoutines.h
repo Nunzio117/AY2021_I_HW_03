@@ -9,14 +9,16 @@
  *
  * ========================================
 */
-#ifndef __INTERRUPT_TIMER_H
-    #define __INTERRUPT_TIMER_H
-    #include "cytypes.h"
-    #include "Timer.h"
-  
-    uint8_t time;
+#ifndef _INTERRUPT_ROUTINES_H_
+    // Header guard
+    #define _INTERRUPT_ROUTINES_H_
     
-    CY_ISR_PROTO(Custom_TIME_ISR);
-
+    #include "project.h"
+    uint8_t time;
+    /**
+    *   \brief ISR Code.
+    */
+    CY_ISR_PROTO(Custom_TIMER_ISR);
+    
 #endif
 /* [] END OF FILE */

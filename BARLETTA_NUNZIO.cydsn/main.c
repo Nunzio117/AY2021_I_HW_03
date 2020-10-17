@@ -11,7 +11,7 @@
 */
 
 #include "interruptUART.h"
-#include "interruptTIMER.h"
+#include "InterruptRoutines.h"
 #include "main.h"
 
 
@@ -20,7 +20,7 @@ int main(void)
     CyGlobalIntEnable; /* Enable global interrupts. */
     UART_ISR_StartEx(Custom_UART_RX_ISR);
     Timer_Start();
-    TIME_ISR_StartEx(Custom_TIME_ISR);
+    TIME_ISR_StartEx(Custom_TIMER_ISR);
     UART_RGB_Start();
     RGBLed_Start();
     
