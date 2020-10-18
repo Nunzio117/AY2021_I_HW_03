@@ -15,9 +15,7 @@
     
     #include "project.h"
     uint8_t time;
-    /**
-    *   \brief ISR Code.
-    */
+   
     CY_ISR_PROTO(Custom_TIMER_ISR);
     
 #endif

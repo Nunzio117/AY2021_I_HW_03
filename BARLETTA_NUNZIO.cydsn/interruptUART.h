@@ -12,7 +12,7 @@
 # ifndef __INTERRUPT_UART_H__
     # define __INTERRUPT_UART_H__
     #include "cytypes.h"
-    #include "UART_RGB.h"
+    #include "UART.h"
     uint8_t rec;
      
     CY_ISR_PROTO(Custom_UART_RX_ISR);

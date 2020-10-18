@@ -15,6 +15,7 @@
     #include "stdio.h"
     #include "project.h"
     
+    //inizializzazione delle funzioni che seguiranno
     static void RGBLed_WriteRed(uint8_t red);
     static void RGBLed_WriteGreen(uint8_t green);
     static void RGBLed_WriteBlue(uint8_t blue);
@@ -22,42 +23,36 @@
     void RGBLed_Stop();
     void RGBLed_WriteColor();
     
-    static char aaa[20]="RGB LED Program $$$\n";
-    typedef struct {
-        uint8_t red;
-        uint8_t green;
-        uint8_t blue;
-    } Color;
+    //stringa che PSoC manda ad app dopo aver ricevuto il carattere 'v' dalla app stessa
+    static char aaa[20]="RGB LED Program $$$"; 
     
-    Color color;
-    uint8 ba;
-    uint8 value;
-    uint8 cont,flag;
+    uint8 value; //variabile per lettura valori da app a PSoC
+    uint8 cont; //variabile per il conteggio dei byte 
+    uint8 flag; //variabile per indicare lo stato di connessione tra app e PSoC
+    uint8_t col[3]={'\0'}; //array per contenere i 3 byte dei colori (RED, GREEN, BLUE)
     
     void RGBLed_Start(){
-    PWM_RG_Start(); // inizializza il dispositivo pwm RG
-    PWM_BLUE_Start();  // inizializza il dispositivo pwm BLUE
+    PWM_RG_Start(); //inizializza il dispositivo pwm RG
+    PWM_BLUE_Start();  //inizializza il dispositivo pwm BLUE
     }
 
     void RGBLed_Stop(){
-    PWM_RG_Stop(); // stoppa il dispositivo pwm RG.
-    PWM_BLUE_Stop();  // stoppa il dispositivo pwm BLUE.
+    PWM_RG_Stop(); //stoppa il dispositivo pwm RG.
+    PWM_BLUE_Stop();  //stoppa il dispositivo pwm BLUE.
     }
-
+    
+    //funzioni per gestire canali del led RGB tramite i pwm con i valori ricevuti da app
     void RGBLed_WriteColor(){
-    RGBLed_WriteRed(color.red);
-    RGBLed_WriteBlue(color.blue);
-    RGBLed_WriteGreen(color.green);
+        RGBLed_WriteRed(col[0]);
+        RGBLed_WriteGreen(col[1]);
+        RGBLed_WriteBlue(col[2]);
     }
-
     void RGBLed_WriteRed(uint8_t red){
     PWM_RG_WriteCompare1(red);
     }
-
     void RGBLed_WriteGreen(uint8_t green){
     PWM_RG_WriteCompare2(green);
     }
-
     void RGBLed_WriteBlue(uint8_t blue){
     PWM_BLUE_WriteCompare(blue);
     }
