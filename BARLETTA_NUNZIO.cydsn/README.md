@@ -40,3 +40,5 @@ stringa: "RGB LED Program $$$". Il tutto permetterà la connessione tra PSoC ed 
 Il messaggio contenete la informazione sui colori è composto da 5 byte come esplicitato da Assignment. Una volta ricevuto il
 header, i byte successivi fino alll'ultimo di terminazione, dovranno essere mandati entro 5 secondi l'uno dall'altro. Passati
 i 5 secondi la App dovrà rimandare nuovamente l'intero messaggio se vorrà comunicare correttamente col PSoC.
+Se si chiudesse la App, bisognerà riavviare o spegnere anche il PSoC per far si che all'avvio di entrambi si ristabilizzi la
+connessione tra i due, procedendo poi con la comunicazione per i colori. 
