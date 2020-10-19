@@ -24,12 +24,12 @@
     void RGBLed_WriteColor();
     
     //stringa che PSoC manda ad app dopo aver ricevuto il carattere 'v' dalla app stessa
-    static char aaa[20]="RGB LED Program $$$"; 
+    static char message[20]="RGB LED Program $$$"; 
     
     uint8 value; //variabile per lettura valori da app a PSoC
     uint8 cont; //variabile per il conteggio dei byte 
-    uint8 flag; //variabile per indicare lo stato di connessione tra app e PSoC
-    uint8_t col[3]={'\0'}; //array per contenere i 3 byte dei colori (RED, GREEN, BLUE)
+    uint8 connect; //variabile per indicare lo stato di connessione tra app e PSoC
+    uint8_t color[3]={'\0'}; //array per contenere i 3 byte dei colori (RED, GREEN, BLUE)
     
     void RGBLed_Start(){
     PWM_RG_Start(); //inizializza il dispositivo pwm RG
@@ -43,9 +43,9 @@
     
     //funzioni per gestire canali del led RGB tramite i pwm con i valori ricevuti da app
     void RGBLed_WriteColor(){
-        RGBLed_WriteRed(col[0]);
-        RGBLed_WriteGreen(col[1]);
-        RGBLed_WriteBlue(col[2]);
+        RGBLed_WriteRed(color[0]);
+        RGBLed_WriteGreen(color[1]);
+        RGBLed_WriteBlue(color[2]);
     }
     void RGBLed_WriteRed(uint8_t red){
     PWM_RG_WriteCompare1(red);

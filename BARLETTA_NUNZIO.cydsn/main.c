@@ -28,7 +28,7 @@ int main(void)
     RGBLed_Start(); //start per i pwm RG e Blue (pwm per il rosso e verde, pwm per il blu)
     
     //inizializzazione di variabili descritte nel "main.h"
-    flag=0;
+    connect=0;
     value=0;
     cont=0;
     //variabile usata per il conteggio dei 5 secondi ed inizializzata in "InterruptRoutines.h"
@@ -39,19 +39,19 @@ int main(void)
     for(;;)
     {
         //stato per la connessione con la applicazione per la recezione colori
-        if(!flag && rec){
+        if(!connect && rec){
             rec=0;
             time=0;
             value=UART_ReadRxData();
             UART_ClearRxBuffer();
             if(value=='v'){
-                flag=1;
-                UART_PutString(aaa);
+                connect=1;
+                UART_PutString(message);
             }
         }
         
         //stato di ascolto in attesa del byte di header per la recezione colori
-        if (flag && rec && !cont){
+        if (connect && rec && !cont){
             rec=0;
             time=0;
             value=UART_ReadRxData();
@@ -63,34 +63,34 @@ int main(void)
         }
         
         //controllo trasmissione tra byte che deve avvenire entro 5 secondi
-        if(cont!=0 && time==5 && flag){
-           UART_PutString("\nK");
+        if(cont!=0 && time==5 && connect){
            cont=0;
            time=0;
            value=0;
         }
         
         //stato di recezione dei 3 byte relativi al rosso, verde e blu
-        if(cont>0 && cont<4 && rec && flag){
+        if(cont>0 && cont<4 && rec && connect){
             rec=0;
             time=0;
-            col[cont-1]=UART_ReadRxData();
+            color[cont-1]=UART_ReadRxData();
             UART_ClearRxBuffer();
-            //UART_PutString("\n-1");
             cont+=1;
         }
         
         //stato di recezione dell'ultimo byte di trasmissione
-        if (flag && rec && cont==4){
+        if (connect && rec && cont==4){
             rec=0;
             value=UART_ReadRxData();
             UART_ClearRxBuffer();
-            //UART_RGB_PutString("\n-4");
             if(value==0xC0){
                 RGBLed_WriteColor(); 
                 cont=0;
             }else{
-                UART_PutString("error");
+                //UART_PutString("error");
+                /*questo message l'ho lasciato come esempio, ma si potrebbe fare qualsiasi cosa per 
+                indicare un errore di trasmissione a causa del errato byte di terminazione. Stessa
+                cosa si può pensare volendo per i 5 secondi tra byte*/
                 cont=0;
                 value=0;
             }

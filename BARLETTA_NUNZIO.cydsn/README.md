@@ -5,7 +5,7 @@ Le richieste per tale assignment sono esplicitate nel README generale.
 
 ## Schematico
 Vi sono presenti i seguenti componenti:
-. Pagina 1:
+- Pagina 1:
 	- CY8CKIT-059 KIT: impostato con "visibile" solo sui canali Rx e TX;
 	- X3 Resistenze da 330 Ohm;
 	- Led_Red: Pin relativo al canale del rosso;
@@ -15,7 +15,7 @@ Vi sono presenti i seguenti componenti:
 	- Green: rappresentazione del canale verde del led RGB;
 	- Blue: rappresentazione del canale blu del led RGB;
 	- UART: componente interno al PSoC per comunicazione con terminale.
-. Pagina 2:
+- Pagina 2:
 	- PWM_RG: PWM per gestire i colori rosso e verde del LED RGB;
 	- PWM_BLUE: PWM per gestire il colore blu del LED RGB;
 	- Timer: timer per avere una isr per conteggio dei 5 secondi come richiesti da assignment.
@@ -35,5 +35,8 @@ Nei file di "Header" e di "Source" vi sono esplicitati già i dettagli reativi a
 
 
 ## Nota sulla programmazione dell'elaborato
-
-
+Come richiesto da assignment, dopo aver ricevuto il carattere 'v' dalla applicazione, il PSoC manderà a quest'ultima la seguente
+stringa: "RGB LED Program $$$". Il tutto permetterà la connessione tra PSoC ed App.
+Il messaggio contenete la informazione sui colori è composto da 5 byte come esplicitato da Assignment. Una volta ricevuto il
+header, i byte successivi fino alll'ultimo di terminazione, dovranno essere mandati entro 5 secondi l'uno dall'altro. Passati
+i 5 secondi la App dovrà rimandare nuovamente l'intero messaggio se vorrà comunicare correttamente col PSoC.
